@@ -12,7 +12,7 @@ public class MyListTest {
     @Before
     public void setUp() throws Exception {
 
-//        list = new MyArrayList<Integer>();
+        list = new MyArrayList<Integer>();
         for (int i = 0; i < 10; i++) {
             list.add(i);
         }
@@ -38,12 +38,12 @@ public class MyListTest {
 
     @Test
     public void whenRemovedNumberByNameThenSizeMustBeDecreased() {
-//        MyList<String> list2 = new MyArrayList<String>();
-//        for (int i = 0; i < 10; i++) {
-//            list.add("Brand" + i);
-//        }
-//        list.add(6, "BMW");
-//        list.remove("BMW");
+        MyList<String> list2 = new MyArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            list2.add("Brand" + i);
+        }
+        list2.add(6, "BMW");
+        list2.remove("BMW");
         assertEquals(10, list.size());
     }
 
