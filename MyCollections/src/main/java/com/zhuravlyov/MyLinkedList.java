@@ -17,10 +17,28 @@ public class MyLinkedList<T> implements MyList<T> {
         }
         size++;
     }
-
     @Override
     public void add(int index, T t) {
+
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        if (index == size) {
+            add(t);
+            return;
+        }
+        Node nodeNext = getNode(index);
+        Node nodePrevious = nodeNext.previous;
+        Node nodeNew = new Node(nodePrevious, t, nodeNext);
+        if(nodePrevious != null) {
+            nodePrevious.next = nodeNew;
+        }else{
+            first = nodeNew;
+        }
+        nodeNext.previous = nodeNew;
+        size++;
     }
+
 
     @Override
     public T get(int index) {
@@ -52,6 +70,14 @@ public class MyLinkedList<T> implements MyList<T> {
         first = null;
         last = null;
         size = 0;
+    }
+
+    private Node getNode(int index) {
+        Node node = first;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        return node;
     }
 
     private static class Node<T> {
