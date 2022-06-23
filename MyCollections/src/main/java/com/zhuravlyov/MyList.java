@@ -1,9 +1,9 @@
 package com.zhuravlyov;
 
 public interface MyList<T> {
-    boolean add(T t);
+    void add(T t);
 
-    boolean add(int index, T t);
+    void add(int index, T t);
 
     T get(int index);
 

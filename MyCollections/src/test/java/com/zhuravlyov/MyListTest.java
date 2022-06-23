@@ -20,13 +20,13 @@ public class MyListTest {
 
     @Test
     public void whenAddedNumber15InTheEndPositionThenSizeMustBeIncreased() {
-        assertTrue(list.add(15));
+        list.add(15);
         assertEquals(11, list.size());
     }
 
     @Test
     public void whenAddedNumber777InMiddlePositionThenSizeMustBeIncreased() {
-        assertTrue(list.add(5, 777));
+        list.add(5, 777);
         assertEquals(11, list.size());
     }
 

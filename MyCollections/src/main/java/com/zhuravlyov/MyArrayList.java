@@ -5,27 +5,21 @@ public class MyArrayList<T> implements MyList<T> {
     private T[] array = (T[]) new Object[10];
     private int size = 0;
 
-    public int getSize() {
-        return size;
-    }
-
     @Override
-    public boolean add(T t) {
+    public void add(T t) {
         array[size] = t;
         size++;
         increaseArray();
-        return true;
     }
 
     @Override
-    public boolean add(int index, T t) {
+    public void add(int index, T t) {
         for (int i = size; i < index; i--) {
             array[i] = array[i - 1];
         }
         array[index] = t;
         size++;
         increaseArray();
-        return true;
     }
 
     @Override
@@ -56,7 +50,7 @@ public class MyArrayList<T> implements MyList<T> {
 
     @Override
     public int size() {
-        return getSize();
+        return size;
     }
 
     @Override
