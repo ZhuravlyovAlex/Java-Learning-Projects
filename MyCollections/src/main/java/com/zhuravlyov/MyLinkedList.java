@@ -17,11 +17,12 @@ public class MyLinkedList<T> implements MyList<T> {
         }
         size++;
     }
+
     @Override
     public void add(int index, T t) {
 
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException();
+            throw new IllegalArgumentException();
         }
         if (index == size) {
             add(t);
@@ -30,29 +31,49 @@ public class MyLinkedList<T> implements MyList<T> {
         Node nodeNext = getNode(index);
         Node nodePrevious = nodeNext.previous;
         Node nodeNew = new Node(nodePrevious, t, nodeNext);
-        if(nodePrevious != null) {
+        if (nodePrevious != null) {
             nodePrevious.next = nodeNew;
-        }else{
+        } else {
             first = nodeNew;
         }
         nodeNext.previous = nodeNew;
         size++;
     }
 
-
     @Override
     public T get(int index) {
-        return null;
+        return getNode(index).value;
     }
 
     @Override
     public boolean remove(T t) {
+        Node node = first;
+        for (int i = 0; i < size; i++) {
+            if (t.equals(node.value)) {
+                return removeAt(i);
+            }
+            node = node.next;
+        }
         return false;
     }
 
     @Override
     public boolean removeAt(int index) {
-        return false;
+        Node currentNode = getNode(index);
+        Node nodePrevious = currentNode.previous;
+        Node nodeNext = currentNode.next;
+        if (nodePrevious != null) {
+            nodePrevious.next = nodeNext;
+        } else {
+            first = nodeNext;
+        }
+        if (nodeNext != null) {
+            nodeNext.previous = nodePrevious;
+        } else {
+            last = nodePrevious;
+        }
+        size--;
+        return true;
     }
 
     @Override
@@ -62,7 +83,11 @@ public class MyLinkedList<T> implements MyList<T> {
 
     @Override
     public void print() {
-
+        System.out.print("[ ");
+        for(int i = 0; i < size; i++) {
+            System.out.print(get(i) + " ");
+        }
+        System.out.print("]");
     }
 
     @Override
@@ -72,7 +97,10 @@ public class MyLinkedList<T> implements MyList<T> {
         size = 0;
     }
 
-    private Node getNode(int index) {
+    private Node<T> getNode(int index) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException();
+        }
         Node node = first;
         for (int i = 0; i < index; i++) {
             node = node.next;
