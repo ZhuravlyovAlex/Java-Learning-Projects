@@ -10,4 +10,8 @@ public class Passenger {
     public String getName() {
         return name;
     }
+
+    public void go(Bus bus) {
+        bus.inCome(this);
+    }
 }
