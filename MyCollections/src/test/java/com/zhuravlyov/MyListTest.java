@@ -12,8 +12,8 @@ public class MyListTest {
     @Before
     public void setUp() throws Exception {
 
-        list = new MyLinkedList<Integer>();
-        for (int i = 0; i < 10; i++) {
+        list = new MyArrayList<Integer>();
+        for (int i = 0; i < 100; i++) {
             list.add(i);
         }
     }
@@ -21,35 +21,45 @@ public class MyListTest {
     @Test
     public void whenAddedNumber15InTheEndPositionThenSizeMustBeIncreased() {
         list.add(15);
-        assertEquals(11, list.size());
+        assertEquals(101, list.size());
     }
 
     @Test
     public void whenAddedNumber777InMiddlePositionThenSizeMustBeIncreased() {
         list.add(5, 777);
-        assertEquals(11, list.size());
+        assertEquals(101, list.size());
     }
 
     @Test
     public void whenRemovedNumberByIndexThenSizeMustBeDecreased() {
-        list.removeAt(5);
-        assertEquals(9, list.size());
+        assertTrue(list.removeAt(5));
+        assertEquals(99, list.size());
     }
 
     @Test
-    public void whenRemovedNumberByNameThenSizeMustBeDecreased() {
+    public void whenRemovedByNameThenSizeMustBeDecreased() {
         MyList<String> list2 = new MyLinkedList<String>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             list2.add("Brand" + i);
         }
         list2.add(6, "BMW");
-        list2.remove("BMW");
-        assertEquals(10, list.size());
+        assertTrue(list2.remove("BMW"));
+        assertEquals(100, list.size());
+    }
+
+    @Test
+    public void whenRemovedNonExistentObjectByNameThenSizeMustBeWithoutChanges() {
+        MyList<String> list2 = new MyLinkedList<String>();
+        for (int i = 0; i < 100; i++) {
+            list2.add("Brand" + i);
+        }
+        assertFalse(list2.remove("BMW"));
+        assertEquals(100, list.size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenTryingToCallNonExistentIndexThenThrownException() {
-        list.get(10);
+        list.get(100);
     }
 
     @Test

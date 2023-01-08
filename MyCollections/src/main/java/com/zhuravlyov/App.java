@@ -8,7 +8,7 @@ package com.zhuravlyov;
  */
 public class App {
     public static void main(String[] args) {
-    MyLinkedList<String> list =  new MyLinkedList<>();
+    MyList<String> list =  new MyArrayList<>();
 
     }
 }

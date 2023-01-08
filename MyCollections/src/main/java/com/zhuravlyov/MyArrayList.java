@@ -1,5 +1,7 @@
 package com.zhuravlyov;
 
+import java.util.Arrays;
+
 public class MyArrayList<T> implements MyList<T> {
 
     private T[] array = (T[]) new Object[10];
@@ -14,9 +16,8 @@ public class MyArrayList<T> implements MyList<T> {
 
     @Override
     public void add(int index, T t) {
-        for (int i = size; i < index; i--) {
-            array[i] = array[i - 1];
-        }
+        checkIndex(index);
+        System.arraycopy(array, index, array, index - 1, size - index);
         array[index] = t;
         size++;
         increaseArray();
@@ -41,9 +42,7 @@ public class MyArrayList<T> implements MyList<T> {
     @Override
     public boolean removeAt(int index) {
         checkIndex(index);
-        for (int i = index; i < size; i++) {
-            array[i] = array[i + 1];
-        }
+        System.arraycopy(array, index, array, index + 1, size - index);
         size--;
         return true;
     }
@@ -70,11 +69,7 @@ public class MyArrayList<T> implements MyList<T> {
 
     private void increaseArray() {
         if (size >= array.length) {
-            T[] newArray = (T[]) new Object[array.length * 2];
-            for (int i = 0; i < array.length; i++) {
-                newArray[i] = array[i];
-            }
-            array = newArray;
+            array = Arrays.copyOf(array, array.length * 2);
         }
     }
 
