@@ -1,6 +1,7 @@
-package com.zhuravlyov;
+package com.zhuravlyov.mylist;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class MyArrayList<T> implements MyList<T> {
 
@@ -8,19 +9,23 @@ public class MyArrayList<T> implements MyList<T> {
     private int size = 0;
 
     @Override
-    public void add(T t) {
+    public boolean add(T t) {
         array[size] = t;
         size++;
         increaseArray();
+        return true;
     }
 
     @Override
-    public void add(int index, T t) {
-        checkIndex(index);
-        System.arraycopy(array, index, array, index - 1, size - index);
+    public boolean add(int index, T t) {
+        increaseArray();
+        if(index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+        System.arraycopy(array, index, array, index + 1, size - index);
         array[index] = t;
         size++;
-        increaseArray();
+        return true;
     }
 
     @Override
@@ -33,7 +38,17 @@ public class MyArrayList<T> implements MyList<T> {
     public boolean remove(T t) {
         for (int i = 0; i < size; i++) {
             if (t.equals(array[i])) {
-                removeAt(i);
+               return removeAt(i);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean contains(T t) {
+        for (int i = 0; i < size; i++) {
+            if (t.equals(array[i])) {
+                return true;
             }
         }
         return false;
@@ -42,7 +57,7 @@ public class MyArrayList<T> implements MyList<T> {
     @Override
     public boolean removeAt(int index) {
         checkIndex(index);
-        System.arraycopy(array, index, array, index + 1, size - index);
+        System.arraycopy(array, index + 1, array, index, size - 1 - index);
         size--;
         return true;
     }
@@ -63,7 +78,7 @@ public class MyArrayList<T> implements MyList<T> {
 
     private void checkIndex(int index) {
         if (0 < index && index >= size) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
     }
 
@@ -77,5 +92,20 @@ public class MyArrayList<T> implements MyList<T> {
     public void clear() {
         size = 0;
         array = (T[]) new Object[10];
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private int index = 0;
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+            @Override
+            public T next() {
+                return array[index++];
+            }
+        };
     }
 }

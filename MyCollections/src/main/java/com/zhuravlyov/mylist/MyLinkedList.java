@@ -1,36 +1,38 @@
-package com.zhuravlyov;
+package com.zhuravlyov.mylist;
+
+import java.util.Iterator;
 
 public class MyLinkedList<T> implements MyList<T> {
-    private Node first;
-    private Node last;
+    private Node<T> first;
+    private Node<T> last;
     private int size = 0;
 
     @Override
-    public void add(T t) {
+    public boolean add(T t) {
         if (size == 0) {
-            first = new Node(null, t, null);
+            first = new Node<>(null, t, null);
             last = first;
         } else {
-            Node secondLast = last;
+            Node<T> secondLast = last;
             last = new Node<>(secondLast, t, null);
             secondLast.next = last;
         }
         size++;
+        return true;
     }
 
     @Override
-    public void add(int index, T t) {
+    public boolean add(int index, T t) {
 
         if (index < 0 || index > size) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
         if (index == size) {
-            add(t);
-            return;
+            return add(t);
         }
-        Node nodeNext = getNode(index);
-        Node nodePrevious = nodeNext.previous;
-        Node nodeNew = new Node(nodePrevious, t, nodeNext);
+        Node<T> nodeNext = getNode(index);
+        Node<T> nodePrevious = nodeNext.previous;
+        Node<T> nodeNew = new Node<>(nodePrevious, t, nodeNext);
         if (nodePrevious != null) {
             nodePrevious.next = nodeNew;
         } else {
@@ -38,6 +40,7 @@ public class MyLinkedList<T> implements MyList<T> {
         }
         nodeNext.previous = nodeNew;
         size++;
+        return true;
     }
 
     @Override
@@ -47,21 +50,23 @@ public class MyLinkedList<T> implements MyList<T> {
 
     @Override
     public boolean remove(T t) {
-        Node node = first;
-        for (int i = 0; i < size; i++) {
-            if (t.equals(node.value)) {
-                return removeAt(i);
-            }
-            node = node.next;
-        }
+       int index = findElement(t);
+       if(index != -1) {
+           return removeAt(index);
+       }
         return false;
     }
 
     @Override
+    public boolean contains(T t) {
+        return findElement(t) != -1;
+    }
+
+    @Override
     public boolean removeAt(int index) {
-        Node currentNode = getNode(index);
-        Node nodePrevious = currentNode.previous;
-        Node nodeNext = currentNode.next;
+        Node<T> currentNode = getNode(index);
+        Node<T> nodePrevious = currentNode.previous;
+        Node<T> nodeNext = currentNode.next;
         if (nodePrevious != null) {
             nodePrevious.next = nodeNext;
         } else {
@@ -97,23 +102,53 @@ public class MyLinkedList<T> implements MyList<T> {
         size = 0;
     }
 
+    private int findElement(T t) {
+        Node<T> node = first;
+        for (int i = 0; i < size; i++) {
+            if (t.equals(node.value)) {
+                return i;
+            }
+            node = node.next;
+        }
+        return -1;
+    }
+
     private Node<T> getNode(int index) {
         if (index < 0 || index >= size) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
-        Node node = first;
+        Node<T> node = first;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
         return node;
     }
 
-    private static class Node<T> {
-        private Node previous;
-        private T value;
-        private Node next;
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private Node<T> node = first;
 
-        private Node(Node previous, T value, Node next) {
+            @Override
+            public boolean hasNext() {
+                return node != null;
+            }
+
+            @Override
+            public T next() {
+                T current = node.value;
+                node = node.next;
+                return current;
+            }
+        };
+    }
+
+    private static class Node<T> {
+        private Node<T> previous;
+        private T value;
+        private Node<T> next;
+
+        private Node(Node<T> previous, T value, Node<T> next) {
             this.previous = previous;
             this.value = value;
             this.next = next;
